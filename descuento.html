@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ingá | Descuento del producto</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Nunito+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f8f5ec;--card:#fff;--tx:#1b2a1e;--mu:#5a6a5e;--g1:#1f5a34;--g2:#143620;--tierra:#8a4b2a;--ac:#e5891b;--ln:#dfe4d8;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 "Nunito Sans",system-ui,sans-serif}
+h1,h2,h3,h4{font-family:Fraunces,Georgia,serif}
+button{font:inherit;cursor:pointer}
+
+header{background:var(--g1);color:#fff;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;}
+header h1{margin:0;font-size:1.4rem;}
+
+.container{max-width:850px;margin:30px auto;padding:0 20px;display:grid;gap:20px;}
+.card{background:var(--card);border:1px solid var(--ln);padding:24px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.05);}
+.card h3{margin-top:0;color:var(--g1);border-bottom:2px solid var(--ln);padding-bottom:8px;font-size:1.2rem;}
+
+.god-input{width:100%;padding:10px 14px;border:1px solid var(--ln);border-radius:8px;background:var(--bg);color:var(--tx);margin-bottom:12px;font:inherit;}
+.god-btn{background:var(--g1);color:#fff;border:0;padding:10px 18px;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.95rem;transition:opacity .2s;}
+.god-btn:hover{opacity:0.9;}
+.god-btn-danger{background:#c0392b;}
+.god-list-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);padding:10px 14px;border:1px solid var(--ln);border-radius:8px;margin-bottom:8px;font-size:0.95rem;}
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); z-index: 50; display: grid; place-items: center; padding: 20px; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; }
+.modal-overlay.open { opacity: 1; visibility: visible; }
+.modal-content { background: var(--card); color: var(--tx); width: 100%; max-width: 500px; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3); padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--ln); padding-bottom: 10px; }
+.modal-header h3 { margin: 0; font-size: 1.2rem; }
+.modal-header button { background: none; border: 0; font-size: 1.5rem; cursor: pointer; }
+
+.crop-wrap{display:flex;justify-content:center}.crop-frame{position:relative;overflow:hidden;background:#fff;outline:4px dashed var(--ac);cursor:grab;touch-action:none;margin:4px}.crop-frame.circ{border-radius:50%}.crop-frame img{position:absolute;max-width:none;user-select:none;-webkit-user-drag:none;pointer-events:none}
+.thumb{object-fit:cover;background:#fff;border:1px solid var(--ln);border-radius:6px;vertical-align:middle;flex-shrink:0}.mini{padding:4px 10px;font-size:.8rem}
+
+.promo-btn{border:0;padding:8px 18px;font-weight:800;position:relative;cursor:pointer;background:#f4c430;color:#1b2a1e}.promo-btn[hidden]{display:none}
+.fx-pulse{animation:fxp .5s}@keyframes fxp{50%{transform:scale(1.18)}}
+.fx-jump{animation:fxj .6s}@keyframes fxj{30%{transform:translateY(-12px) rotate(-4deg)}60%{transform:none}80%{transform:translateY(-4px)}}
+.fx-shine{overflow:hidden}.fx-shine::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.75),transparent);animation:fxs .7s}@keyframes fxs{to{left:130%}}
+.fx-bit{position:fixed;pointer-events:none;width:20px;height:20px;z-index:99;animation:fxb .9s forwards;font-size:18px;line-height:1}@keyframes fxb{from{opacity:1}to{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--r))}}
+.poster{aspect-ratio:4/5;width:100%;max-width:320px;margin:0 auto;border-radius:12px;overflow:hidden;position:relative;box-shadow:0 6px 20px rgba(0,0,0,.25)}.poster>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pin{position:absolute;inset:0;padding:12% 11%;overflow:auto;text-align:center}.pin h3{margin:0 0 10px;font-size:1.5rem}.pit{margin:12px 0;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.25)}.pit b{display:block}.pit em{font-style:normal;font-weight:800;font-size:1.25rem}.pit p{margin:2px 0 0;font-size:.85rem;opacity:.9}.pty{font-size:.7rem;font-weight:800;padding:1px 8px;border-radius:99px;display:inline-block;margin-bottom:2px}
+.fld{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.fld label{font-size:.85rem;font-weight:700;display:block}.fld input[type=color]{height:40px;padding:2px}
+</style>
+</head>
+<body>
+<header><h1 id="ttl-page">Descuento</h1><button class="god-btn" style="background:#e5891b;color:#111" onclick="location.href='admin.html'">← Volver al panel</button></header>
+<div class="container">
+ <div class="card"><h3>Producto</h3><div id="prod-info" style="display:flex;align-items:center;gap:10px"></div></div>
+ <div class="card">
+  <h3>Botón de descuento (aparece sobre este producto)</h3>
+  <label style="display:flex;gap:6px;align-items:center;margin-bottom:10px"><input type="checkbox" id="pr-active"> Mostrar el botón en la tienda</label>
+  <div class="fld">
+   <div><label>Texto del botón</label><input class="god-input" id="pr-label" maxlength="24"></div>
+   <div><label>Color del botón</label><input type="color" class="god-input" id="pr-bg"></div>
+   <div><label>Color del texto</label><input type="color" class="god-input" id="pr-fg"></div>
+   <div><label>Forma</label><select class="god-input" id="pr-shape"><option value="pill">Píldora</option><option value="round">Redondeado</option><option value="square">Cuadrado</option></select></div>
+   <div><label>Animación al apretar</label><select class="god-input" id="pr-anim"></select></div>
+  </div>
+  <p style="font-size:.85rem;color:var(--mu);margin:0 0 8px">Vista previa (tocalo para probar la animación):</p>
+  <button class="promo-btn" id="pr-prev"></button>
+ </div>
+ <div class="card">
+  <h3>Cartel que verá el cliente</h3>
+  <div class="fld">
+   <div><label>Tipo de cartel</label><select class="god-input" id="po-mode"><option value="text">Con texto (editable)</option><option value="flyer">Solo flyer (imagen)</option></select></div>
+   <div><label>Título del cartel</label><input class="god-input" id="po-title" maxlength="40"></div>
+   <div><label>Color de fondo</label><input type="color" class="god-input" id="po-bg"></div>
+   <div><label>Color del texto</label><input type="color" class="god-input" id="po-color"></div>
+   <div><label>Color de acento</label><input type="color" class="god-input" id="po-accent"></div>
+  </div>
+  <button class="god-btn" onclick="openCropModal('promo-img',320,400,'')" style="width:100%;background:#e5891b;color:#111;margin-bottom:8px">Subir imagen (marco de temporada o flyer completo)</button>
+  <button class="god-btn god-btn-danger mini" id="po-clear" style="margin-bottom:12px">Quitar imagen</button>
+  <p style="font-size:.85rem;color:var(--mu);margin:0 0 8px">Así lo verá el cliente (proporción 4:5):</p>
+  <div id="po-prev"></div>
+ </div>
+ <div class="card">
+  <h3>Agregar descuento</h3>
+  <div class="fld">
+   <div><label>Tipo</label><select class="god-input" id="d-type"><option value="season">Por temporada (Navidad, Otoño…)</option><option value="special">Descuento especial</option><option value="combo">Combo (llevando varios productos)</option><option value="cat">Aplicar a toda la categoría</option></select></div>
+   <div><label>Título</label><input class="god-input" id="d-title" placeholder="Ej: Navidad"></div>
+   <div><label>Descuento</label><select class="god-input" id="d-val"></select></div>
+  </div>
+  <div id="d-catbox" style="display:none"><label style="font-weight:700;font-size:.85rem">Categoría (se aplica a todos sus productos, incluidos los que cargues después)</label><select class="god-input" id="d-cat"></select></div>
+  <div id="d-combobox" style="display:none"><label style="font-weight:700;font-size:.85rem">Productos del combo (además de este). Si el cliente lleva todos, el % se aplica a todas las unidades de cada uno.</label><div id="d-combolist" style="max-height:160px;overflow:auto;border:1px solid var(--ln);border-radius:8px;padding:8px;margin-bottom:12px"></div></div>
+  <input class="god-input" id="d-desc" placeholder="Detalle o condición (opcional)">
+  <button class="god-btn" id="d-add">Agregar descuento</button>
+ </div>
+ <div class="card"><h3>Descuentos propios de este producto</h3><div id="d-list"></div></div>
+ <div class="card"><h3>Descuentos de su categoría (<span id="cat-name"></span>)</h3><p style="font-size:.85rem;color:var(--mu);margin-top:0">Se aplican solos a todos los productos de la categoría. Tildá «Excluir» si este producto no debe recibirlos.</p><div id="c-list"></div></div>
+ <div class="card">
+  <button class="god-btn" id="pr-save" style="width:100%">Guardar descuento del producto</button>
+  <button class="god-btn god-btn-danger" id="pr-remove" style="width:100%;margin-top:10px">Quitar descuento de este producto</button>
+ </div>
+</div>
+<div class="modal-overlay" id="crop-modal" aria-hidden="true">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="crop-title">Recortar Imagen</h3>
+      <button id="close-crop">×</button>
+    </div>
+    <p style="font-size:0.85rem; margin:0; color:var(--mu);">Ajusta la imagen exactamente al recuadro proporcionado.</p>
+    <div id="crop-container-wrap" class="crop-wrap"></div>
+    <input type="range" id="crop-zoom" min="0.2" max="3" step="0.05" value="1" style="width:100%;">
+    <button class="god-btn" id="btn-save-crop" style="width:100%;">Confirmar y Aplicar</button>
+  </div>
+</div>
+<script>
+if(localStorage.getItem('inga_admin_auth')!=='true'){location.href='login.html';}
+const $=id=>document.getElementById(id),G=$;
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const TY={season:"Temporada",combo:"Combo",special:"Especial"};
+const DEF_PROMO={btn:{active:true,label:"Ver descuentos",bg:"#f4c430",color:"#1b2a1e",shape:"pill",anim:"paws"},poster:{mode:"text",title:"Descuentos Ingá",bg:"#1f5a34",color:"#ffffff",accent:"#f4c430",img:""},items:[]};
+const SHAPES={pill:"99px",round:"10px",square:"2px"};
+function applyBtn(el,b){el.textContent=b.label;el.style.background=b.bg;el.style.color=b.color;el.style.borderRadius=SHAPES[b.shape]||"99px";el.hidden=!b.active;}
+function posterHTML(p){
+  const po=p.poster,act=p.items.filter(x=>x.active);
+  if(po.mode==="flyer"&&po.img)return `<div class="poster" style="background:#fff"><img src="${po.img}" alt="Descuentos"></div>`;
+  const bg=po.img?`background:${po.bg} url('${po.img}') center/cover`:`background:${po.bg}`;
+  return `<div class="poster" style="${bg};color:${po.color}"><div class="pin"><h3 style="color:${po.accent}">${esc(po.title)}</h3>${act.map(x=>`<div class="pit"><span class="pty" style="background:${po.accent};color:#111">${TY[x.type]||""}${x.cat?" · "+esc(x.cat):""}</span><b>${esc(x.title)}</b><em style="color:${po.accent}">${esc(x.value)}</em><p>${esc(x.desc)}</p></div>`).join("")||"<p>Próximamente…</p>"}</div></div>`;
+}
+const PAWI='<svg viewBox="0 0 100 100" width="20" height="20" fill="#e5891b"><path d="M50 48C62 48 76 60 80 72C84 84 74 92 64 88C58 86 54 84 50 88C46 84 42 86 36 88C26 92 16 84 20 72C24 60 38 48 50 48Z"/><ellipse cx="15" cy="42" rx="10" ry="13"/><ellipse cx="36" cy="20" rx="11" ry="14"/><ellipse cx="64" cy="20" rx="11" ry="14"/><ellipse cx="85" cy="42" rx="10" ry="13"/></svg>';
+function fx(el,t){
+  if(!t||t==="none")return;
+  if(["pulse","jump","shine"].includes(t)){const c="fx-"+t;el.classList.remove(c);void el.offsetWidth;el.classList.add(c);setTimeout(()=>el.classList.remove(c),800);return;}
+  const r=el.getBoundingClientRect();
+  for(let i=0;i<7;i++){const s=document.createElement("span");s.className="fx-bit";s.innerHTML=t==="paws"?PAWI:"🍃";
+    s.style.left=(r.left+r.width*(0.1+0.8*Math.random()))+"px";s.style.top=(r.top+r.height/2)+"px";
+    s.style.setProperty("--dx",(Math.random()*60-30)+"px");s.style.setProperty("--dy",(t==="paws"?-60-Math.random()*40:40+Math.random()*50)+"px");s.style.setProperty("--r",(Math.random()*120-60)+"deg");
+    document.body.appendChild(s);setTimeout(()=>s.remove(),950);}
+}
+const ANIMS=[["none","Ninguna"],["paws","Huellas de yaguareté"],["leaves","Hojas de ingá cayendo"],["pulse","Latido"],["jump","Salto del yaguareté"],["shine","Destello"]];
+
+TY.cat="Categoría";
+const lbl=v=>v[0]==="p"?v.slice(1)+"% OFF":"$"+Number(v.slice(1)).toLocaleString("es-AR")+" menos";
+const dval=(v,price)=>{const n=parseInt(v.slice(1));return v[0]==="p"?Math.round(price*n/100):Math.min(price,n);};
+const normPromo=x=>{const p=Object.assign({},DEF_PROMO,x||{});p.btn=Object.assign({},DEF_PROMO.btn,p.btn);p.poster=Object.assign({},DEF_PROMO.poster,p.poster);p.items=p.items||[];return p;};
+let currentTarget="", currentIndex=null, targetWidth=420, targetHeight=260, exportW=630, isCircular=false, tempCatImg="", tempProdImg="";
+const TITLES={'promo-img':'imagen del cartel','header-left':'flyer izquierdo','header-right':'flyer derecho','hero-banner':'pancarta grande','hero-edit':'pancarta','category':'icono de categoría','cat-edit':'icono de categoría','product':'foto del producto','prod-edit':'foto del producto'};
+
+const fileInput = document.createElement("input");
+fileInput.type = "file"; fileInput.accept = "image/*";
+fileInput.onchange = e => {
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = ev => openCropperUI(ev.target.result);
+  r.readAsDataURL(f); fileInput.value = "";
+};
+
+function openCropModal(target, w, h, cls, circular = false, index = null){
+  currentTarget = target; currentIndex = index;
+  targetWidth = w; targetHeight = h; isCircular = circular;
+  exportW = circular ? 240 : Math.round(w * 1.5);
+  fileInput.click();
+}
+window.editImg = (target, i) => {
+  const s = {'hero-edit':[420,260,false], 'cat-edit':[260,260,true], 'prod-edit':[340,260,false]}[target];
+  openCropModal(target, s[0], s[1], '', s[2], i);
+};
+
+function openCropperUI(src){
+  $("crop-title").textContent = "Recortar " + TITLES[currentTarget];
+  const k = Math.min(1, Math.min(440, window.innerWidth - 90) / targetWidth);
+  const dw = Math.round(targetWidth * k), dh = Math.round(targetHeight * k);
+  $("crop-container-wrap").innerHTML = `<div class="crop-frame${isCircular?' circ':''}" id="crop-area" style="width:${dw}px;height:${dh}px"><img id="crop-img"></div>`;
+  $("crop-modal").classList.add("open");
+  const img = $("crop-img");
+  img.onload = () => setupCropper(img, dw, dh);
+  img.src = src;
+}
+$("close-crop").onclick = () => $("crop-modal").classList.remove("open");
+
+function setupCropper(img, dw, dh){
+  const nw = img.naturalWidth, nh = img.naturalHeight, area = $("crop-area"), zr = $("crop-zoom");
+  const base = Math.max(dw/nw, dh/nh), minZ = Math.min(dw/nw, dh/nh) / base;
+  zr.min = minZ; zr.max = 4; zr.step = 0.01; zr.value = 1;
+  let x = 0, y = 0, drag = null;
+  const dims = () => ({w: nw*base*zr.value, h: nh*base*zr.value});
+  const paint = () => {
+    const {w,h} = dims(), mx = Math.abs(w-dw)/2, my = Math.abs(h-dh)/2;
+    x = Math.max(-mx, Math.min(mx, x)); y = Math.max(-my, Math.min(my, y));
+    img.style.width = w+"px"; img.style.height = h+"px";
+    img.style.left = (dw/2 + x - w/2)+"px"; img.style.top = (dh/2 + y - h/2)+"px";
+  };
+  paint();
+  area.onpointerdown = e => { drag = {px: e.clientX - x, py: e.clientY - y}; area.setPointerCapture(e.pointerId); area.style.cursor = "grabbing"; };
+  area.onpointermove = e => { if(!drag) return; x = e.clientX - drag.px; y = e.clientY - drag.py; paint(); };
+  area.onpointerup = area.onpointercancel = () => { drag = null; area.style.cursor = "grab"; };
+  area.onwheel = e => { e.preventDefault(); zr.value = Math.min(4, Math.max(minZ, +zr.value - e.deltaY*0.002)); paint(); };
+  zr.oninput = paint;
+
+  // Lo que se ve en el recuadro se dibuja igual en el archivo final (misma proporción)
+  $("btn-save-crop").onclick = () => {
+    const e = exportW / dw, {w,h} = dims();
+    const c = document.createElement("canvas");
+    c.width = exportW; c.height = Math.round(exportW * dh / dw);
+    const ctx = c.getContext("2d");
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, c.width, c.height);
+    ctx.drawImage(img, (dw/2 + x - w/2)*e, (dh/2 + y - h/2)*e, w*e, h*e);
+    applyCrop(c.toDataURL("image/jpeg", 0.88));
+  };
+}
+
+
+let productos=[];try{productos=JSON.parse(localStorage.getItem("inga_prods")||"[]");}catch(e){}
+const pid=new URLSearchParams(location.search).get("id");
+const prod=productos.find(p=>String(p.id)===String(pid));
+if(!prod){document.body.innerHTML='<p style="padding:30px">No encontré ese producto. <a href="admin.html">Volver al panel</a></p>';throw new Error("sin producto");}
+let promo=normPromo(prod.promo);
+G("ttl-page").textContent="Descuento: "+prod.n;
+G("prod-info").innerHTML=(prod.img?`<img class="thumb" src="${prod.img}" style="width:70px;aspect-ratio:34/26">`:"")+`<div><b>${esc(prod.n)}</b><br><small>$${esc(prod.p)}</small></div>`;
+function persist(){prod.promo=promo;try{localStorage.setItem("inga_prods",JSON.stringify(productos));}catch(e){alert("No hay espacio para guardar. Probá con una imagen más liviana.");}}
+function paint(){applyBtn(G("pr-prev"),Object.assign({},promo.btn,{active:true}));G("po-prev").innerHTML=posterHTML(promo);}
+let catdisc=[];try{catdisc=JSON.parse(localStorage.getItem("inga_catdisc")||"[]");}catch(e){}
+let cats=[];try{cats=JSON.parse(localStorage.getItem("inga_cats")||"[]");}catch(e){}
+if(!cats.length)cats=["Cocina","Mate","Baño","Bazar","Dormitorio","Aromas"].map(n=>({n}));
+const saveCat=()=>localStorage.setItem("inga_catdisc",JSON.stringify(catdisc));
+prod.excl=prod.excl||[];
+G("d-val").innerHTML='<optgroup label="Porcentaje">'+[5,10,15,20,25,30,35,40,45,50,60,70].map(n=>`<option value="p${n}">${n}% OFF</option>`).join("")+'</optgroup><optgroup label="Monto fijo">'+[500,1000,2000,3000,5000,10000].map(n=>`<option value="m${n}">${lbl("m"+n)}</option>`).join("")+'</optgroup>';
+G("d-cat").innerHTML=cats.filter(c=>c.n!=="Todos").map(c=>`<option>${esc(c.n)}</option>`).join("");G("d-cat").value=prod.c;
+G("cat-name").textContent=prod.c;
+G("d-combolist").innerHTML=productos.filter(p=>p.id!==prod.id).map(p=>`<label style="display:flex;gap:6px;align-items:center;font-size:.9rem"><input type="checkbox" value="${p.id}"> ${esc(p.n)}</label>`).join("")||"<small>No hay otros productos.</small>";
+const tog=()=>{const t=G("d-type").value;G("d-catbox").style.display=t==="cat"?"block":"none";G("d-combobox").style.display=t==="combo"?"block":"none";};
+G("d-type").onchange=tog;tog();
+function render(){
+  const b=promo.btn,p=promo.poster;
+  G("pr-active").checked=b.active;G("pr-label").value=b.label;G("pr-bg").value=b.bg;G("pr-fg").value=b.color;G("pr-shape").value=b.shape;
+  G("pr-anim").innerHTML=ANIMS.map(x=>`<option value="${x[0]}">${x[1]}</option>`).join("");G("pr-anim").value=b.anim;
+  G("po-mode").value=p.mode;G("po-title").value=p.title;G("po-bg").value=p.bg;G("po-color").value=p.color;G("po-accent").value=p.accent;
+  const nm=id=>{const q=productos.find(x=>x.id===id);return q?q.n:"";};
+  G("d-list").innerHTML=promo.items.map((x,i)=>`<div class="god-list-item"><div><b>${esc(x.title)}</b> – ${esc(x.val?lbl(x.val):x.value)}<br><small>${TY[x.type]}${x.combo?" con: "+x.combo.map(nm).map(esc).join(", "):""} · ${x.active?"Activo":"Inactivo"}</small></div><div style="display:flex;gap:6px"><button class="god-btn mini" style="background:${x.active?'#27ae60':'#7f8c8d'}" onclick="togD(${i})">${x.active?'Desactivar':'Activar'}</button><button class="god-btn god-btn-danger mini" onclick="delD(${i})">Borrar</button></div></div>`).join("")||'<p style="color:var(--mu);font-size:.85rem;margin:0">Todavía no cargaste descuentos propios.</p>';
+  G("c-list").innerHTML=catdisc.map((x,i)=>[x,i]).filter(([x])=>x.cat===prod.c).map(([x,i])=>`<div class="god-list-item"><div><b>${esc(x.title)}</b> – ${lbl(x.val)}<br><small>${x.active?"Activo":"Inactivo"}</small><br><label style="font-size:.85rem"><input type="checkbox" ${prod.excl.includes(x.id)?"checked":""} onchange="exclD(${x.id},this.checked)"> Excluir este producto</label></div><div style="display:flex;gap:6px"><button class="god-btn mini" style="background:${x.active?'#27ae60':'#7f8c8d'}" onclick="togC(${i})">${x.active?'Desactivar':'Activar'}</button><button class="god-btn god-btn-danger mini" onclick="delC(${i})">Borrar</button></div></div>`).join("")||'<p style="color:var(--mu);font-size:.85rem;margin:0">Esta categoría no tiene descuentos.</p>';
+  paint();
+}
+function readPromo(){
+  Object.assign(promo.btn,{active:G("pr-active").checked,label:G("pr-label").value||"Ver descuentos",bg:G("pr-bg").value,color:G("pr-fg").value,shape:G("pr-shape").value,anim:G("pr-anim").value});
+  Object.assign(promo.poster,{mode:G("po-mode").value,title:G("po-title").value,bg:G("po-bg").value,color:G("po-color").value,accent:G("po-accent").value});
+  paint();
+}
+["pr-active","pr-label","pr-bg","pr-fg","pr-shape","pr-anim","po-mode","po-title","po-bg","po-color","po-accent"].forEach(id=>{G(id).addEventListener("input",readPromo);G(id).addEventListener("change",readPromo);});
+G("pr-prev").onclick=e=>fx(e.currentTarget,promo.btn.anim);
+G("po-clear").onclick=()=>{promo.poster.img="";persist();render();};
+G("d-add").onclick=()=>{
+  const t=G("d-type").value,title=G("d-title").value.trim(),val=G("d-val").value,desc=G("d-desc").value.trim();
+  if(!title)return alert("Escribí un título para el descuento.");
+  if(t==="cat"){
+    catdisc.push({id:Date.now(),cat:G("d-cat").value,title,val,desc,active:true});saveCat();
+    alert("Listo: el descuento quedó cargado a TODA la categoría «"+G("d-cat").value+"». También alcanzará a los productos nuevos de esa categoría. Las exclusiones se administran desde el panel.");
+  }else{
+    const it={id:Date.now(),type:t,title,val,value:lbl(val),desc,active:true};
+    if(t==="combo"){it.combo=[...G("d-combolist").querySelectorAll("input:checked")].map(i=>Number(i.value));if(!it.combo.length)return alert("Elegí al menos un producto más para el combo.");}
+    promo.items.push(it);persist();
+  }
+  ["d-title","d-desc"].forEach(id=>G(id).value="");render();
+};
+window.togD=i=>{promo.items[i].active=!promo.items[i].active;persist();render();};
+window.delD=i=>{promo.items.splice(i,1);persist();render();};
+window.togC=i=>{catdisc[i].active=!catdisc[i].active;saveCat();render();};
+window.delC=i=>{if(!confirm("Se borra para toda la categoría. ¿Seguro?"))return;catdisc.splice(i,1);saveCat();render();};
+window.exclD=(id,ck)=>{prod.excl=prod.excl.filter(x=>x!==id);if(ck)prod.excl.push(id);persist();};
+function applyCrop(d){G("crop-modal").classList.remove("open");promo.poster.img=d;persist();render();}
+G("pr-save").onclick=()=>{readPromo();persist();alert("¡Descuento guardado en este producto!");};
+G("pr-remove").onclick=()=>{if(!confirm("¿Quitar el descuento de este producto?"))return;delete prod.promo;try{localStorage.setItem("inga_prods",JSON.stringify(productos));}catch(e){}location.href="admin.html";};
+render();
+</script>
+</body>
+</html>

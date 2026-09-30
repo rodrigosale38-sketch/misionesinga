@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ingá | Panel Modo Dios</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Nunito+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f8f5ec;--card:#fff;--tx:#1b2a1e;--mu:#5a6a5e;--g1:#1f5a34;--g2:#143620;--tierra:#8a4b2a;--ac:#e5891b;--ln:#dfe4d8;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 "Nunito Sans",system-ui,sans-serif}
+h1,h2,h3,h4{font-family:Fraunces,Georgia,serif}
+button{font:inherit;cursor:pointer}
+
+header{background:var(--g1);color:#fff;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;}
+header h1{margin:0;font-size:1.4rem;}
+
+.container{max-width:850px;margin:30px auto;padding:0 20px;display:grid;gap:20px;}
+.card{background:var(--card);border:1px solid var(--ln);padding:24px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.05);}
+.card h3{margin-top:0;color:var(--g1);border-bottom:2px solid var(--ln);padding-bottom:8px;font-size:1.2rem;}
+
+.god-input{width:100%;padding:10px 14px;border:1px solid var(--ln);border-radius:8px;background:var(--bg);color:var(--tx);margin-bottom:12px;font:inherit;}
+.god-btn{background:var(--g1);color:#fff;border:0;padding:10px 18px;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.95rem;transition:opacity .2s;}
+.god-btn:hover{opacity:0.9;}
+.god-btn-danger{background:#c0392b;}
+.god-list-item{display:flex;justify-content:space-between;align-items:center;background:var(--bg);padding:10px 14px;border:1px solid var(--ln);border-radius:8px;margin-bottom:8px;font-size:0.95rem;}
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); z-index: 50; display: grid; place-items: center; padding: 20px; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; }
+.modal-overlay.open { opacity: 1; visibility: visible; }
+.modal-content { background: var(--card); color: var(--tx); width: 100%; max-width: 500px; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3); padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--ln); padding-bottom: 10px; }
+.modal-header h3 { margin: 0; font-size: 1.2rem; }
+.modal-header button { background: none; border: 0; font-size: 1.5rem; cursor: pointer; }
+
+.crop-wrap{display:flex;justify-content:center}.crop-frame{position:relative;overflow:hidden;background:#fff;outline:4px dashed var(--ac);cursor:grab;touch-action:none;margin:4px}.crop-frame.circ{border-radius:50%}.crop-frame img{position:absolute;max-width:none;user-select:none;-webkit-user-drag:none;pointer-events:none}
+.thumb{object-fit:cover;background:#fff;border:1px solid var(--ln);border-radius:6px;vertical-align:middle;flex-shrink:0}.mini{padding:4px 10px;font-size:.8rem}
+
+.promo-btn{border:0;padding:8px 18px;font-weight:800;position:relative;cursor:pointer;background:#f4c430;color:#1b2a1e}.promo-btn[hidden]{display:none}
+.fx-pulse{animation:fxp .5s}@keyframes fxp{50%{transform:scale(1.18)}}
+.fx-jump{animation:fxj .6s}@keyframes fxj{30%{transform:translateY(-12px) rotate(-4deg)}60%{transform:none}80%{transform:translateY(-4px)}}
+.fx-shine{overflow:hidden}.fx-shine::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.75),transparent);animation:fxs .7s}@keyframes fxs{to{left:130%}}
+.fx-bit{position:fixed;pointer-events:none;width:20px;height:20px;z-index:99;animation:fxb .9s forwards;font-size:18px;line-height:1}@keyframes fxb{from{opacity:1}to{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--r))}}
+.poster{aspect-ratio:4/5;width:100%;max-width:320px;margin:0 auto;border-radius:12px;overflow:hidden;position:relative;box-shadow:0 6px 20px rgba(0,0,0,.25)}.poster>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pin{position:absolute;inset:0;padding:12% 11%;overflow:auto;text-align:center}.pin h3{margin:0 0 10px;font-size:1.5rem}.pit{margin:12px 0;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.25)}.pit b{display:block}.pit em{font-style:normal;font-weight:800;font-size:1.25rem}.pit p{margin:2px 0 0;font-size:.85rem;opacity:.9}.pty{font-size:.7rem;font-weight:800;padding:1px 8px;border-radius:99px;display:inline-block;margin-bottom:2px}
+.fld{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.fld label{font-size:.85rem;font-weight:700;display:block}.fld input[type=color]{height:40px;padding:2px}
+</style>
+</head>
+<body>
+
+<script>
+if (localStorage.getItem('inga_admin_auth') !== 'true') {
+    window.location.href = 'login.html';
+}
+function cerrarSesion() {
+    localStorage.removeItem('inga_admin_auth');
+    window.location.href = 'login.html';
+}
+</script>
+
+<header>
+    <h1>⚙️ Panel Modo Dios - Ingá</h1>
+    <div>
+        <button class="god-btn" style="background:#e5891b; color:#111; margin-right:10px;" onclick="window.open('index.html','_blank')">Ver Tienda</button>
+        <button class="god-btn god-btn-danger" onclick="cerrarSesion()">Cerrar Sesión</button>
+    </div>
+</header>
+
+<div class="container">
+    
+    <!-- Gestor Superior Isologo -->
+    <div class="card">
+        <h3>Gestor de Banners Isologo (Lados Izquierdo y Derecho)</h3>
+        
+        <div style="background:var(--bg); padding:12px; border-radius:8px; margin-bottom:12px; border:1px solid var(--ln);">
+            <h4>Lado Izquierdo (Isologo)</h4><img id="god-left-prev" class="thumb" style="width:200px;aspect-ratio:5/2;display:none;margin-bottom:8px">
+            <button class="god-btn" onclick="openCropModal('header-left', 260, 104, '')" style="margin-bottom:8px; width:100%; background:#e5891b; color:#111;">Subir y Recortar Flyer Izquierdo</button>
+            <label style="font-size:0.9rem; display:flex; align-items:center; gap:6px;"><input type="checkbox" id="god-left-active"> Activar banner en la tienda</label>
+        </div>
+
+        <div style="background:var(--bg); padding:12px; border-radius:8px; margin-bottom:12px; border:1px solid var(--ln);">
+            <h4>Lado Derecho (Isologo)</h4><img id="god-right-prev" class="thumb" style="width:200px;aspect-ratio:5/2;display:none;margin-bottom:8px">
+            <button class="god-btn" onclick="openCropModal('header-right', 260, 104, '')" style="margin-bottom:8px; width:100%; background:#e5891b; color:#111;">Subir y Recortar Flyer Derecho</button>
+            <label style="font-size:0.9rem; display:flex; align-items:center; gap:6px;"><input type="checkbox" id="god-right-active"> Activar banner en la tienda</label>
+        </div>
+
+        <button class="god-btn" id="god-save-header-promo" style="width:100%;">Guardar Promos del Isologo</button>
+    </div>
+
+    <!-- Gestor de Pancartas de Tienda (Zona Verde) -->
+    <div class="card">
+        <h3>Gestor de Encabezado y Pancarta de Tienda (Zona Verde)</h3>
+        <label style="font-weight:bold; font-size:0.9rem; display:block; margin-bottom:4px;">Título Principal:</label>
+        <input type="text" id="god-hero-title" class="god-input">
+        
+        <label style="font-weight:bold; font-size:0.9rem; display:block; margin-bottom:4px;">Subtítulo:</label>
+        <input type="text" id="god-hero-sub" class="god-input">
+
+        <button class="god-btn" onclick="openCropModal('hero-banner', 420, 260, 'crop-area-hero')" style="margin-bottom:12px; width:100%; background:#e5891b; color:#111;">+ Subir y Recortar Pancarta Grande (Derecha)</button>
+        
+        <div id="god-banners-list" style="margin-top:10px;"></div>
+        <button class="god-btn" id="god-save-hero" style="margin-top:14px; width:100%;">Guardar Encabezado</button>
+    </div>
+
+    <!-- Gestor de Categorías -->
+    <div class="card">
+        <h3>Gestor de Categorías</h3>
+        <input type="text" id="god-cat-name" class="god-input" placeholder="Nombre de categoría (ej: Artesanías)">
+        <button class="god-btn" onclick="openCropModal('category', 260, 260, 'crop-area-circ', true)" style="margin-bottom:12px; width:100%;">Subir y Recortar Icono / Foto Circular</button>
+        <div id="cat-preview" style="margin-bottom:10px"></div>
+        <button class="god-btn" id="god-add-cat">Agregar Categoría</button>
+        <div id="god-cats-list" style="margin-top:14px;"></div>
+    </div>
+
+    <!-- Gestor de Productos -->
+    <div class="card">
+        <h3>Gestor de Productos</h3>
+        <input type="text" id="god-prod-name" class="god-input" placeholder="Título del producto">
+        <select id="god-prod-cat" class="god-input"></select>
+        <input type="number" id="god-prod-price" class="god-input" placeholder="Precio ($)">
+        <button class="god-btn" onclick="openCropModal('product', 340, 260, 'crop-area-prod')" style="margin-bottom:12px; width:100%;">Subir y Recortar Foto del Producto</button>
+        <div id="prod-preview" style="margin-bottom:10px"></div>
+        <button class="god-btn" id="god-add-prod">Guardar Producto</button>
+        <div id="god-prods-list" style="margin-top:14px;"></div>
+    </div>
+
+    <div class="card">
+        <h3>Descuentos por categoría</h3>
+        <p style="font-size:.9rem;color:var(--mu);margin-top:0">Cargá un descuento una sola vez y se aplicará automáticamente a todos los productos de esa categoría, incluidos los que agregues después. Desde acá también podés excluir productos puntuales.</p>
+        <div class="fld">
+            <div><label>Categoría</label><select class="god-input" id="cd-cat"></select></div>
+            <div><label>Título del descuento</label><input class="god-input" id="cd-title" placeholder="Ej: Promo Mates"></div>
+            <div><label>Descuento</label><select class="god-input" id="cd-val"></select></div>
+        </div>
+        <button class="god-btn" id="cd-add" style="width:100%;margin-bottom:14px">+ Cargar a toda la categoría</button>
+        <div id="cd-list"></div>
+        <div id="cd-exclusions" style="margin-top:14px"></div>
+    </div>
+    <div class="card">
+        <h3>WhatsApp y botón de compra</h3>
+        <label style="font-weight:700;font-size:.9rem">Número de WhatsApp (con código de país, solo números)</label>
+        <input class="god-input" id="wa-num" inputmode="numeric" placeholder="Ej: 5493764123456">
+        <label style="font-weight:700;font-size:.9rem">Texto del botón final del carrito</label>
+        <input class="god-input" id="wa-btn" maxlength="40">
+        <button class="god-btn" id="wa-save">Guardar</button>
+        <p style="font-size:.85rem;color:var(--mu);margin:10px 0 0">Este número recibe los pedidos y aparece en el pie de la tienda.</p>
+    </div>
+
+</div>
+
+<!-- Modal Recortador Universal -->
+<div class="modal-overlay" id="crop-modal" aria-hidden="true">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="crop-title">Recortar Imagen</h3>
+      <button id="close-crop">×</button>
+    </div>
+    <p style="font-size:0.85rem; margin:0; color:var(--mu);">Ajusta la imagen exactamente al recuadro proporcionado.</p>
+    <div id="crop-container-wrap" class="crop-wrap"></div>
+    <input type="range" id="crop-zoom" min="0.2" max="3" step="0.05" value="1" style="width:100%;">
+    <button class="god-btn" id="btn-save-crop" style="width:100%;">Confirmar y Aplicar</button>
+  </div>
+</div>
+
+<script>
+let DEFAULT_CATS=[
+  {n:"Todos", e:"🌿", img:""},
+  {n:"Cocina", e:"🍳", img:""},
+  {n:"Mate", e:"🧉", img:""},
+  {n:"Baño", e:"🛁", img:""},
+  {n:"Bazar", e:"🧺", img:""},
+  {n:"Dormitorio", e:"🛏️", img:""},
+  {n:"Aromas", e:"✨", img:""}
+];
+
+let DEFAULT_PRODS=[
+  {id:1,n:"Set de cocina (ejemplo)",c:"Cocina",p:22500,img:""},
+  {id:2,n:"Mate y bombilla (ejemplo)",c:"Mate",p:12900,img:""},
+  {id:3,n:"Termo 1L (ejemplo)",c:"Mate",p:24800,img:""},
+  {id:4,n:"Toalla de baño (ejemplo)",c:"Baño",p:9800,img:""},
+  {id:5,n:"Difusor de aromas (ejemplo)",c:"Aromas",p:8500,img:""},
+  {id:6,n:"Colcha 2 plazas (ejemplo)",c:"Dormitorio",p:31900,img:""},
+  {id:7,n:"Cesto organizador (ejemplo)",c:"Bazar",p:8700,img:""},
+  {id:8,n:"Set de tazas (ejemplo)",c:"Cocina",p:11600,img:""}
+];
+
+let cats = JSON.parse(localStorage.getItem("inga_cats") || JSON.stringify(DEFAULT_CATS));
+let productos = JSON.parse(localStorage.getItem("inga_prods") || JSON.stringify(DEFAULT_PRODS));
+let heroConfig = JSON.parse(localStorage.getItem("inga_hero_config") || '{"title":"Bajamos el precio, no la calidad.","subtitle":"Cocina, baño, mate, bazar, dormitorio y aromas. Tu casa con raíz Misionera","banners":[]}');
+let headerPromo = JSON.parse(localStorage.getItem("inga_header_promo") || '{"leftImg":"","leftActive":false,"rightImg":"","rightActive":false}');
+
+const saveAll=()=>{
+  try{
+    localStorage.setItem("inga_promo", JSON.stringify(promo));
+    localStorage.setItem("inga_settings", JSON.stringify(settings));
+    localStorage.setItem("inga_cats", JSON.stringify(cats));
+    localStorage.setItem("inga_prods", JSON.stringify(productos));
+    localStorage.setItem("inga_hero_config", JSON.stringify(heroConfig));
+    localStorage.setItem("inga_header_promo", JSON.stringify(headerPromo));
+  }catch(e){ alert("No hay más espacio en el navegador para guardar. Probá con fotos más livianas o borrá alguna."); }
+};
+
+const $=id=>document.getElementById(id);
+
+function renderGodMode(){
+  $("god-hero-title").value = heroConfig.title;
+  $("god-hero-sub").value = heroConfig.subtitle;
+  $("god-left-active").checked = headerPromo.leftActive;
+  [["left",headerPromo.leftImg],["right",headerPromo.rightImg]].forEach(([k,im])=>{const el=$("god-"+k+"-prev");el.src=im||"";el.style.display=im?"block":"none";});
+  showPending();
+  $("god-right-active").checked = headerPromo.rightActive;
+
+  $("god-banners-list").innerHTML = heroConfig.banners.map((b, i)=>`
+    <div class="god-list-item">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <img class="thumb" src="${b.img}" style="width:65px;aspect-ratio:42/26">
+        <span>Pancarta #${i+1} (${b.active ? '<b>Activa</b>' : 'Inactiva'})</span>
+      </div>
+      <div>
+        <button class="god-btn mini" onclick="editImg('hero-edit',${i})" style="background:#e5891b;color:#111">Cambiar imagen</button> <button class="god-btn" onclick="toggleBanner(${i})" style="padding:4px 8px; font-size:0.8rem; background:${b.active?'#27ae60':'#7f8c8d'}">${b.active?'Desactivar':'Activar'}</button>
+        <button class="god-btn god-btn-danger" onclick="deleteBanner(${i})" style="padding:4px 8px; font-size:0.8rem;">Borrar</button>
+      </div>
+    </div>
+  `).join("") || '<p style="color:var(--mu); font-size:0.85rem; margin:0;">No hay pancartas cargadas.</p>';
+
+  $("god-cats-list").innerHTML = cats.map((c, i)=>`
+    <div class="god-list-item">
+      <span style="display:flex;align-items:center;gap:10px;">${c.img?`<img class="thumb" src="${c.img}" style="width:36px;height:36px;border-radius:50%">`:`<span style="font-size:1.4rem">${c.e}</span>`} <b>${c.n}</b></span>
+      <div style="display:flex;gap:6px"><button class="god-btn mini" style="background:#e5891b;color:#111" onclick="editImg('cat-edit',${i})">Cambiar imagen</button>${c.n!=="Todos"?`<button class="god-btn god-btn-danger mini" onclick="deleteCat(${i})">Borrar</button>`:''}</div>
+    </div>`).join("");
+
+  $("god-prod-cat").innerHTML = cats.filter(c=>c.n!=="Todos").map(c=>`<option value="${c.n}">${c.n}</option>`).join("");
+
+  $("god-prods-list").innerHTML = productos.map((p, i)=>`
+    <div class="god-list-item">
+      <div style="display:flex;align-items:center;gap:10px;">${p.img?`<img class="thumb" src="${p.img}" style="width:52px;aspect-ratio:34/26">`:`<span class="thumb" style="width:52px;aspect-ratio:34/26;display:inline-grid;place-items:center;font-size:.65rem;color:var(--mu)">Sin foto</span>`}<div><b>${p.n}</b><br><small>$${p.p}</small></div></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button class="god-btn mini" style="background:#f4c430;color:#111" onclick="saveAll();location.href='descuento.html?id=${p.id}'">${p.promo?'Editar descuento':'Agregar descuento'}</button><button class="god-btn mini" style="background:#e5891b;color:#111" onclick="editImg('prod-edit',${i})">Cambiar imagen</button><button class="god-btn god-btn-danger mini" onclick="deleteProd(${i})">Borrar</button></div>
+    </div>`).join("");
+}
+
+$("god-save-header-promo").onclick = () => {
+  headerPromo.leftActive = $("god-left-active").checked;
+  headerPromo.rightActive = $("god-right-active").checked;
+  saveAll();
+  alert("¡Promociones del isologo guardadas!");
+};
+
+$("god-save-hero").onclick = () => {
+  heroConfig.title = $("god-hero-title").value;
+  heroConfig.subtitle = $("god-hero-sub").value;
+  saveAll();
+  alert("¡Encabezado guardado!");
+};
+
+window.toggleBanner = i => { heroConfig.banners[i].active = !heroConfig.banners[i].active; saveAll(); renderGodMode(); };
+window.deleteBanner = i => { heroConfig.banners.splice(i, 1); saveAll(); renderGodMode(); };
+
+$("god-add-cat").onclick = () => {
+  const name = $("god-cat-name").value.trim();
+  if(!name) return alert("Escribe un nombre de categoría.");
+  cats.push({n: name, e: "✨", img: tempCatImg});
+  tempCatImg = ""; $("god-cat-name").value = "";
+  saveAll(); renderGodMode();
+  alert("¡Categoría agregada con éxito a la tienda!");
+};
+
+window.deleteCat = i => { cats.splice(i, 1); saveAll(); renderGodMode(); };
+
+$("god-add-prod").onclick = () => {
+  const name = $("god-prod-name").value.trim();
+  const price = parseFloat($("god-prod-price").value);
+  const category = $("god-prod-cat").value;
+  if(!name || isNaN(price)) return alert("Completa nombre y precio válidos.");
+  productos.push({ id: Date.now(), n: name, c: category, p: price, img: tempProdImg });
+  tempProdImg = ""; $("god-prod-name").value = ""; $("god-prod-price").value = "";
+  saveAll(); renderGodMode();
+  alert("¡Producto agregado con éxito a la tienda!");
+};
+
+window.deleteProd = i => { productos.splice(i, 1); saveAll(); renderGodMode(); };
+
+let currentTarget="", currentIndex=null, targetWidth=420, targetHeight=260, exportW=630, isCircular=false, tempCatImg="", tempProdImg="";
+const TITLES={'promo-img':'imagen del cartel','header-left':'flyer izquierdo','header-right':'flyer derecho','hero-banner':'pancarta grande','hero-edit':'pancarta','category':'icono de categoría','cat-edit':'icono de categoría','product':'foto del producto','prod-edit':'foto del producto'};
+
+const fileInput = document.createElement("input");
+fileInput.type = "file"; fileInput.accept = "image/*";
+fileInput.onchange = e => {
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = ev => openCropperUI(ev.target.result);
+  r.readAsDataURL(f); fileInput.value = "";
+};
+
+function openCropModal(target, w, h, cls, circular = false, index = null){
+  currentTarget = target; currentIndex = index;
+  targetWidth = w; targetHeight = h; isCircular = circular;
+  exportW = circular ? 240 : Math.round(w * 1.5);
+  fileInput.click();
+}
+window.editImg = (target, i) => {
+  const s = {'hero-edit':[420,260,false], 'cat-edit':[260,260,true], 'prod-edit':[340,260,false]}[target];
+  openCropModal(target, s[0], s[1], '', s[2], i);
+};
+
+function openCropperUI(src){
+  $("crop-title").textContent = "Recortar " + TITLES[currentTarget];
+  const k = Math.min(1, Math.min(440, window.innerWidth - 90) / targetWidth);
+  const dw = Math.round(targetWidth * k), dh = Math.round(targetHeight * k);
+  $("crop-container-wrap").innerHTML = `<div class="crop-frame${isCircular?' circ':''}" id="crop-area" style="width:${dw}px;height:${dh}px"><img id="crop-img"></div>`;
+  $("crop-modal").classList.add("open");
+  const img = $("crop-img");
+  img.onload = () => setupCropper(img, dw, dh);
+  img.src = src;
+}
+$("close-crop").onclick = () => $("crop-modal").classList.remove("open");
+
+function setupCropper(img, dw, dh){
+  const nw = img.naturalWidth, nh = img.naturalHeight, area = $("crop-area"), zr = $("crop-zoom");
+  const base = Math.max(dw/nw, dh/nh), minZ = Math.min(dw/nw, dh/nh) / base;
+  zr.min = minZ; zr.max = 4; zr.step = 0.01; zr.value = 1;
+  let x = 0, y = 0, drag = null;
+  const dims = () => ({w: nw*base*zr.value, h: nh*base*zr.value});
+  const paint = () => {
+    const {w,h} = dims(), mx = Math.abs(w-dw)/2, my = Math.abs(h-dh)/2;
+    x = Math.max(-mx, Math.min(mx, x)); y = Math.max(-my, Math.min(my, y));
+    img.style.width = w+"px"; img.style.height = h+"px";
+    img.style.left = (dw/2 + x - w/2)+"px"; img.style.top = (dh/2 + y - h/2)+"px";
+  };
+  paint();
+  area.onpointerdown = e => { drag = {px: e.clientX - x, py: e.clientY - y}; area.setPointerCapture(e.pointerId); area.style.cursor = "grabbing"; };
+  area.onpointermove = e => { if(!drag) return; x = e.clientX - drag.px; y = e.clientY - drag.py; paint(); };
+  area.onpointerup = area.onpointercancel = () => { drag = null; area.style.cursor = "grab"; };
+  area.onwheel = e => { e.preventDefault(); zr.value = Math.min(4, Math.max(minZ, +zr.value - e.deltaY*0.002)); paint(); };
+  zr.oninput = paint;
+
+  // Lo que se ve en el recuadro se dibuja igual en el archivo final (misma proporción)
+  $("btn-save-crop").onclick = () => {
+    const e = exportW / dw, {w,h} = dims();
+    const c = document.createElement("canvas");
+    c.width = exportW; c.height = Math.round(exportW * dh / dw);
+    const ctx = c.getContext("2d");
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, c.width, c.height);
+    ctx.drawImage(img, (dw/2 + x - w/2)*e, (dh/2 + y - h/2)*e, w*e, h*e);
+    applyCrop(c.toDataURL("image/jpeg", 0.88));
+  };
+}
+
+function applyCrop(d){
+  $("crop-modal").classList.remove("open");
+  const t = currentTarget, i = currentIndex;
+  if(t === 'header-left'){ headerPromo.leftImg = d; headerPromo.leftActive = true; }
+  else if(t === 'header-right'){ headerPromo.rightImg = d; headerPromo.rightActive = true; }
+  else if(t === 'hero-banner'){ heroConfig.banners.push({img: d, active: true}); }
+  else if(t === 'hero-edit'){ heroConfig.banners[i].img = d; }
+  else if(t === 'cat-edit'){ cats[i].img = d; }
+  else if(t === 'prod-edit'){ productos[i].img = d; }
+  else if(t === 'promo-img'){ promo.poster.img = d; }
+  else if(t === 'category'){ tempCatImg = d; }
+  else if(t === 'product'){ tempProdImg = d; }
+  saveAll(); renderGodMode();
+}
+
+function showPending(){
+  const f = (id, im, st) => { $(id).innerHTML = im ? `<span style="font-size:.85rem;color:var(--mu)">Imagen lista: </span><img class="thumb" src="${im}" style="${st}">` : ""; };
+  f("cat-preview", tempCatImg, "width:48px;height:48px;border-radius:50%");
+  f("prod-preview", tempProdImg, "width:68px;aspect-ratio:34/26");
+}
+
+
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const TY={season:"Temporada",combo:"Combo",special:"Especial"};
+const DEF_PROMO={btn:{active:true,label:"Ver descuentos",bg:"#f4c430",color:"#1b2a1e",shape:"pill",anim:"paws"},poster:{mode:"text",title:"Descuentos Ingá",bg:"#1f5a34",color:"#ffffff",accent:"#f4c430",img:""},items:[]};
+let promo;try{promo=JSON.parse(localStorage.getItem("inga_promo"));}catch(e){}
+promo=Object.assign({},DEF_PROMO,promo||{});promo.btn=Object.assign({},DEF_PROMO.btn,promo.btn);promo.poster=Object.assign({},DEF_PROMO.poster,promo.poster);promo.items=promo.items||[];
+let settings;try{settings=JSON.parse(localStorage.getItem("inga_settings"));}catch(e){}
+settings=Object.assign({wa:"5493764000000",btn:"Finalizar compra por WhatsApp"},settings||{});
+const SHAPES={pill:"99px",round:"10px",square:"2px"};
+function applyBtn(el,b){el.textContent=b.label;el.style.background=b.bg;el.style.color=b.color;el.style.borderRadius=SHAPES[b.shape]||"99px";el.hidden=!b.active;}
+function posterHTML(p){
+  const po=p.poster,act=p.items.filter(x=>x.active);
+  if(po.mode==="flyer"&&po.img)return `<div class="poster" style="background:#fff"><img src="${po.img}" alt="Descuentos"></div>`;
+  const bg=po.img?`background:${po.bg} url('${po.img}') center/cover`:`background:${po.bg}`;
+  return `<div class="poster" style="${bg};color:${po.color}"><div class="pin"><h3 style="color:${po.accent}">${esc(po.title)}</h3>${act.map(x=>`<div class="pit"><span class="pty" style="background:${po.accent};color:#111">${TY[x.type]||""}${x.cat?" · "+esc(x.cat):""}</span><b>${esc(x.title)}</b><em style="color:${po.accent}">${esc(x.value)}</em><p>${esc(x.desc)}</p></div>`).join("")||"<p>Próximamente…</p>"}</div></div>`;
+}
+const PAWI='<svg viewBox="0 0 100 100" width="20" height="20" fill="#e5891b"><path d="M50 48C62 48 76 60 80 72C84 84 74 92 64 88C58 86 54 84 50 88C46 84 42 86 36 88C26 92 16 84 20 72C24 60 38 48 50 48Z"/><ellipse cx="15" cy="42" rx="10" ry="13"/><ellipse cx="36" cy="20" rx="11" ry="14"/><ellipse cx="64" cy="20" rx="11" ry="14"/><ellipse cx="85" cy="42" rx="10" ry="13"/></svg>';
+function fx(el,t){
+  if(!t||t==="none")return;
+  if(["pulse","jump","shine"].includes(t)){const c="fx-"+t;el.classList.remove(c);void el.offsetWidth;el.classList.add(c);setTimeout(()=>el.classList.remove(c),800);return;}
+  const r=el.getBoundingClientRect();
+  for(let i=0;i<7;i++){const s=document.createElement("span");s.className="fx-bit";s.innerHTML=t==="paws"?PAWI:"🍃";
+    s.style.left=(r.left+r.width*(0.1+0.8*Math.random()))+"px";s.style.top=(r.top+r.height/2)+"px";
+    s.style.setProperty("--dx",(Math.random()*60-30)+"px");s.style.setProperty("--dy",(t==="paws"?-60-Math.random()*40:40+Math.random()*50)+"px");s.style.setProperty("--r",(Math.random()*120-60)+"deg");
+    document.body.appendChild(s);setTimeout(()=>s.remove(),950);}
+}
+const ANIMS=[["none","Ninguna"],["paws","Huellas de yaguareté"],["leaves","Hojas de ingá cayendo"],["pulse","Latido"],["jump","Salto del yaguareté"],["shine","Destello"]];
+
+const G=id=>document.getElementById(id);
+let catdisc=[];try{catdisc=JSON.parse(localStorage.getItem("inga_catdisc")||"[]");}catch(e){}
+const lbl2=v=>v[0]==="p"?v.slice(1)+"% OFF":"$"+Number(v.slice(1)).toLocaleString("es-AR")+" menos";
+const saveCD=()=>localStorage.setItem("inga_catdisc",JSON.stringify(catdisc));
+function fillCategoryDiscountForm(){
+  const list=cats.filter(c=>c.n!=="Todos");
+  G("cd-cat").innerHTML=list.map(c=>`<option value="${esc(c.n)}">${esc(c.n)}</option>`).join("");
+  G("cd-val").innerHTML='<optgroup label="Porcentaje">'+[5,10,15,20,25,30,35,40,45,50,60,70].map(n=>`<option value="p${n}">${n}% OFF</option>`).join("")+'</optgroup><optgroup label="Monto fijo">'+[500,1000,2000,3000,5000,10000].map(n=>`<option value="m${n}">$${n.toLocaleString("es-AR")} menos</option>`).join("")+'</optgroup>';
+}
+function renderCategoryExclusions(){
+  const cat=G("cd-cat")?.value;
+  if(!cat){G("cd-exclusions").innerHTML="";return;}
+  const ds=catdisc.filter(d=>d.cat===cat);
+  if(!ds.length){G("cd-exclusions").innerHTML='<p style="font-size:.85rem;color:var(--mu)">No hay descuentos activos/configurados para esta categoría todavía.</p>';return;}
+  const ps=productos.filter(p=>p.c===cat);
+  G("cd-exclusions").innerHTML=`<div style="border-top:1px solid var(--ln);padding-top:12px"><b>Excluir productos de esta categoría</b><p style="font-size:.82rem;color:var(--mu);margin:4px 0 10px">Marcá un producto si querés que NO reciba los descuentos de categoría seleccionados.</p>${ds.map(d=>`<div style="background:var(--bg);border:1px solid var(--ln);border-radius:8px;padding:10px;margin-bottom:10px"><b>${esc(d.title)} – ${lbl2(d.val)}</b>${ps.length?ps.map(p=>`<label style="display:flex;align-items:center;gap:7px;font-size:.88rem;margin-top:7px"><input type="checkbox" ${((p.excl||[]).includes(d.id))?'checked':''} onchange="setCategoryExclusion(${p.id},${d.id},this.checked)"> Excluir <b>${esc(p.n)}</b></label>`).join(""):'<p style="font-size:.82rem;color:var(--mu)">No hay productos en esta categoría.</p>'}</div>`).join("")}</div>`;
+}
+function renderPromoAdmin(){
+  G("wa-num").value=settings.wa;G("wa-btn").value=settings.btn;
+  fillCategoryDiscountForm();
+  G("cd-list").innerHTML=catdisc.map((d,i)=>`<div class="god-list-item"><div><b>${esc(d.title)}</b> – ${lbl2(d.val)}<br><small>Categoría: ${esc(d.cat)} · ${d.active?"Activo":"Inactivo"}</small></div><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end"><button class="god-btn mini" style="background:${d.active?'#27ae60':'#7f8c8d'}" onclick="togCD(${i})">${d.active?'Desactivar':'Activar'}</button><button class="god-btn mini" style="background:#e5891b;color:#111" onclick="focusCDCategory('${esc(d.cat)}')">Gestionar exclusiones</button><button class="god-btn god-btn-danger mini" onclick="delCD(${i})">Borrar</button></div></div>`).join("")||'<p style="color:var(--mu);font-size:.85rem;margin:0">Todavía no hay descuentos por categoría.</p>';
+  renderCategoryExclusions();
+}
+window.focusCDCategory=cat=>{if(G("cd-cat"))G("cd-cat").value=cat;renderCategoryExclusions();G("cd-title").focus();};
+window.togCD=i=>{catdisc[i].active=!catdisc[i].active;saveCD();renderPromoAdmin();};
+window.delCD=i=>{if(!confirm("Se borra el descuento para toda la categoría. Las exclusiones guardadas quedan en los productos. ¿Continuar?"))return;catdisc.splice(i,1);saveCD();renderPromoAdmin();};
+window.setCategoryExclusion=(pid,did,checked)=>{const p=productos.find(x=>x.id===pid);if(!p)return;p.excl=p.excl||[];p.excl=p.excl.filter(x=>x!==did);if(checked)p.excl.push(did);saveAll();renderCategoryExclusions();};
+G("cd-cat").onchange=renderCategoryExclusions;
+G("cd-add").onclick=()=>{const cat=G("cd-cat").value,title=G("cd-title").value.trim(),val=G("cd-val").value;if(!cat||!title)return alert("Elegí la categoría y escribí un título para el descuento.");catdisc.push({id:Date.now(),cat,title,val,desc:"",active:true});saveCD();G("cd-title").value="";renderPromoAdmin();alert("Listo: el descuento se cargó a toda la categoría «"+cat+"». Ahora podés excluir productos puntuales si querés.");};
+G("wa-save").onclick=()=>{
+  const n=G("wa-num").value.replace(/\D/g,"");
+  if(n.length<10)return alert("Escribí el número completo con código de país (ej: 5493764123456).");
+  settings.wa=n;settings.btn=G("wa-btn").value.trim()||"Finalizar compra por WhatsApp";
+  saveAll();G("wa-num").value=n;alert("¡Guardado! La tienda ya usa este número.");
+};
+window.addEventListener("pageshow",e=>{if(e.persisted)location.reload();});
+const __rg=renderGodMode;renderGodMode=function(){__rg();renderPromoAdmin();};
+renderGodMode();
+</script>
+</body>
+</html>
